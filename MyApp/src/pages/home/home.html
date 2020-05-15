@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Welcome
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Mobile-Number</ion-label>
+      <ion-input   type="text" [(ngModel)]="mno" value="91" required></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <div padding  class="center">
+    <button   (click)="action()"  (click)="test($event, item)" ion-button color="primary" block>send otp</button>
+  </div>
+ 
+  
+</ion-content>

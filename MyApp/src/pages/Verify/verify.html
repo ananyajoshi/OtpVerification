@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>
+        OTP-Verification
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+
+<ion-content padding>
+<ion-item>
+    <ion-label floating>Enter otp here</ion-label>
+    <ion-input type="password"  [(ngModel)]="otp" value=""></ion-input>
+  </ion-item>
+  <div padding>
+    <button (click)="action2(); disableVerifyOtp = true" [disabled]="disableVerifyOtp" ion-button color="primary" block>verify otp</button>
+  </div>
+
+  <div padding>
+    <button (click)="action3()" ion-button color="primary" block>resend otp</button>
+  </div>
+</ion-content>
