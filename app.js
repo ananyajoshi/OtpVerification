@@ -64,6 +64,7 @@ app.post("/loginSuccess",(req,res)=>{
         if(err) throw err;
         console.log(result);
         console.log('login Success  : '+id);
+        res.status(200);
     });
 });
 

@@ -1,3 +1,4 @@
+import { HomeService } from './../home/home.service';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { NavController ,NavParams} from 'ionic-angular';
@@ -12,23 +13,26 @@ export class VerifyPage {
 
   public mno;
   public otp;
-  public id  ;
- 
+  public id ;
   public disableVerifyOtp: boolean = false;
 
 
-  constructor(public navCtrl: NavController, public verifyservice: VerifyService, http: HttpClientModule,public navParams: NavParams ) { 
+  constructor(public navCtrl: NavController, public verifyservice: VerifyService, http: HttpClientModule,public navParams: NavParams ,public homeservice: HomeService) { 
     this.mno = navParams.get('item');
+    this.id= navParams.get('obj');
   }
   submitted = false;
   
   ngOnInit() {
     console.log('welcome to verification');
-    
   }
 
   action2(){
     console.log('verification of otp started');
+    ()=>{
+      console.log("id received in verify "+this.id);
+    }
+
     this.verifyservice.verifyOtp(this.otp,this.mno).subscribe(
     res=> console.log(res),
     error=> console.log(error),
@@ -64,7 +68,9 @@ export class VerifyPage {
 
   }
 
-
+  changenumber(){
+    this.navCtrl.push(HomePage);
+}
 
 }
 

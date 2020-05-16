@@ -31,7 +31,8 @@ export class HomePage {
     this.homeservice.logintry(this.mno).subscribe((res: Response) => {
       this.id=res["id"];
       console.log("id is "+this.id);
-
+      //this.homeservice.updId(this.id);
+      this.test(this.id,this.mno);
     },
       error => {
         console.log(error, "error");
@@ -50,10 +51,11 @@ export class HomePage {
       console.log(e);
     }
   }
-    
-  public test(event ,item ){
+    //(click)="test($event,item)"
+  public test(obj ,item ){
     this.navCtrl.push(VerifyPage,{
-    item:this.mno
+    item:this.mno,
+    obj:this.id
     });
     }
 }

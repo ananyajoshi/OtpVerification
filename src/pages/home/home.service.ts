@@ -7,13 +7,23 @@ import { Observable } from 'rxjs/Observable'
 
 @Injectable()
 export class HomeService {
- 
+ /*
+  public ido ;
 
+  public updId(nn){
+    this.ido = nn ;
+  }
+  
+ public getId(){
+    return this.ido ;
+  }
+*/
+  
 
   baseURL: string= 'https://api.msg91.com/api/v5/otp?authkey=329039AEVFbxMMy9n5ebbdf3fP1&template_id=5ebbdf67d6fc051be8752693&extra_param={}&mobile=';
   baseURL2:string= '&invisible=1&otp=';
   url:string ='http://localhost:3000/loginTried';
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient) { };
 
   
   getOtp(mno:number):Observable<any> { 
