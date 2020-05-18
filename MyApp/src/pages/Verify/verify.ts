@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController ,NavParams} from 'ionic-angular';
 import { VerifyService } from '../Verify/verify.service';
 import { HttpClientModule } from '@angular/common/http';
-//import { HomePage} from '../home/home'
+import { HomePage} from '../home/home'
 
 @Component({
   selector: 'page-verify',
@@ -14,7 +14,7 @@ export class VerifyPage {
   public otp;
  
   public disableVerifyOtp: boolean = false;
-
+ // mno_str: string = this.mno.toString()
 
   constructor(public navCtrl: NavController, public verifyservice: VerifyService, http: HttpClientModule,public navParams: NavParams ) { 
     this.mno = navParams.get('item');
@@ -32,13 +32,12 @@ export class VerifyPage {
     res=> console.log(res),
     error=> console.log(error),
     ()=> {
-
+        console.log(this.mno);
         this.verifyservice.saveMobile(this.mno).subscribe(
             response => {
               console.log(response);},
-            error => {
-              console.log(error);
-            });
+           
+            );
            
        
     }
@@ -65,7 +64,9 @@ export class VerifyPage {
 
   }
 
-
+changenumber(){
+    this.navCtrl.push(HomePage);
+}
 
 }
 

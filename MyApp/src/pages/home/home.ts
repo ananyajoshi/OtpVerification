@@ -49,6 +49,7 @@ export class HomePage {
     this.navCtrl.push(VerifyPage,{
     item:this.mno
     });
+    
     }
   
 

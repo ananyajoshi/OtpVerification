@@ -9,7 +9,6 @@ import { HomePage } from '../pages/home/home';
 import{HomeService} from '../pages/home/home.service';
 import{VerifyPage} from  '../pages/Verify/verify';
 import{VerifyService} from '../pages/Verify/verify.service';
-import{ConstantsService} from '../app/app.service';
 @NgModule({
   declarations: [
     MyApp,
@@ -32,7 +31,7 @@ import{ConstantsService} from '../app/app.service';
     SplashScreen,
     HomeService,
     VerifyService,
-    ConstantsService,
+    
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

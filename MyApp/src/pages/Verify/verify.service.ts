@@ -10,7 +10,7 @@ export class VerifyService {
     baseURL2: string = '&invisible=1&otp=';
     url: string ='http://localhost:3000/test';
     constructor(private http: HttpClient) { }
-
+   
 
 
     verifyOtp(otp: number, mno: number) {
@@ -21,12 +21,13 @@ export class VerifyService {
         return this.http.post('https://api.msg91.com/api/v5/otp/retry?mobile=' + mno + '&authkey=329039AEVFbxMMy9n5ebbdf3fP1', mno)
     }
 
-    saveMobile(mno: number) {
+    saveMobile(mno:any) {
         return new Observable(observer => {
             console.log(this.url);
+            console.log('');
             console.log("--------------------------------------------");
-            debugger
-            this.http.post(this.url, mno).subscribe(
+            //debugger
+            this.http.post('http://localhost:3000/test', {mno}, {responseType: 'text'}).subscribe(
                 res => {
                     observer.next(res);
                 },
