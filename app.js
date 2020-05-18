@@ -29,7 +29,7 @@ app.post("/loginTried",(req,res)=>{
     let create_dt  = new Date();
 
     
-    let sql = `INSERT INTO login_table(MOBILE_NUMBER,CREATED_DATETIME ) VALUES ?`;
+    let sql = `INSERT INTO login_table(MOBILE_NUMBER,LOGIN_DATETIME) VALUES ?`;
 
     let values = [[MobileNo,create_dt]];
     con.query(sql,[values],(err,result)=>{
@@ -44,27 +44,85 @@ app.post("/loginTried",(req,res)=>{
 
 });
 
+app.post("/loginResponse",(req,res)=>{
 
-app.post("/loginSuccess",(req,res)=>{
+    //to be filled by http request , should be made changes if required
+  //all the req.body.<field> should be same in http request that will be sent so keep that in mind
+      let serv_resp_l= req.body.serv_resp;
+      let id  = req.body.id_no;  
+  
+  
+      //here id is required to fetch the correct record
+  
+      let sql = `UPDATE login_table SET LOGIN_RESPONSE = ?
+      WHERE id = ?`;
+      
+      let values = [serv_resp_l,id];
+      con.query(sql,values,(err,result)=>{
+          if(err) throw err;
+          console.log(result);
+          res.status(200).send("MSG91 server response is successfully updated into database ");
+      });
+  });
+
+
+app.post("/loginVerify",(req,res)=>{
 
   //to be filled by http request , should be made changes if required
 //all the req.body.<field> should be same in http request that will be sent so keep that in mind
     let mod_date = new Date();
-    let ser_resp= req.body.serv_resp;
+    let serv_resp_v= req.body.serv_resp;
     let id  = req.body.id_no;  
-
+    let sts = req.body.sts;
 
     //here id is required to fetch the correct record
 
-
-    let sql = `UPDATE login_table SET MODIFIED_DATETIME = ?,RESPONSE = ?,STATUS = true
+    let sql = `UPDATE login_table SET VERIFY_STATUS= ? , VERIFIED_DATETIME = ?,VERIFY_RESPONSE = ?
     WHERE id = ?`;
-    let values = [mod_date,ser_resp,id];
+    
+    let values = [sts,mod_date,serv_resp_v,id];
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
         console.log(result);
         console.log('login Success  : '+id);
-        res.status(200);
+    });
+});
+
+app.post("/web/chk",(req,res)=>{
+
+   
+      
+      let usrNm  = req.body.usrNm;  
+      let pwd = req.body.pwd;
+  
+      
+      let sql = `select PASSWORD FROM admin_table WHERE USER_NAME = ?`;
+      
+      let values = [usrNm];
+      con.query(sql,values,(err,result)=>{
+          if(err) throw err;
+          console.log("checked password for "+usrNm);
+            if(result[0].PASSWORD==pwd){
+                res.status(200).send({verification : 'Verified'})
+            }else{
+                res.status(200).send({verification : 'Not Verified'})
+            }
+        });     
+  });
+
+  app.post("/web/addAdmin",(req,res)=>{
+    let usrNm  = req.body.usrNm;  
+    let pwd = req.body.pwd;
+
+
+    let sql = `insert into admin values(?,?)`;
+    
+    let values = [usrNm];
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("new admin " + usrNm + " added");
+        console.log(result);
+        
     });
 });
 
@@ -87,7 +145,26 @@ con.connect((err,res)=>{
     if(err) throw err;
     console.log("Connection Established  \n" );
 
-    
+    /*
+     //queries to be run on connection
+    var sqle = `
+    create table  login_table (        
+        ID INT AUTO_INCREMENT,
+        MOBILE_NUMBER VARCHAR(12) NOT NULL,    
+        CREATED_DATETIME DATETIME,
+        MODIFIED_DATETIME DATETIME,
+        STATUS BOOLEAN DEFAULT false,
+        RESPONSE VARCHAR(21844),
+        PRIMARY KEY(ID)
+        )
+    `;
+    con.query(sqle,(err,result)=>
+    {
+        if(err) throw err;
+        console.log(result);
+    })
+    */
+
 
     
 });

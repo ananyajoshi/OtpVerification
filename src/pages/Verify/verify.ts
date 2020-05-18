@@ -14,6 +14,7 @@ export class VerifyPage {
   public mno;
   public otp;
   public id ;
+  public serv_resp_v;
   public disableVerifyOtp: boolean = false;
 
 
@@ -34,17 +35,29 @@ export class VerifyPage {
     }
 
     this.verifyservice.verifyOtp(this.otp,this.mno).subscribe(
-    res=> console.log(res),
-    error=> console.log(error),
-    ()=> {
+    res=> {
+      console.log(res);
+      this.serv_resp_v=JSON.stringify(res);
+      if(res["message"]=="OTP verified success"){
+        this.verifyservice.successLogin(this.id,this.serv_resp_v).subscribe(
+          response => {
+            console.log(response);},
+          error => {
+            console.log(error);
+          });
+      }else{
+        this.verifyservice.failedLogin(this.id,this.serv_resp_v).subscribe(
+          response => {
+            console.log(response);},
+          error => {
+            console.log(error);
+          });
+      }
 
-        this.verifyservice.updateLogin(this.id).subscribe(
-            response => {
-              console.log(response);},
-            error => {
-              console.log(error);
-            });
-    }
+
+      
+    },
+    error=> console.log(error),
      ) }
    
 

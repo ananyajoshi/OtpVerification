@@ -15,6 +15,7 @@ export class HomePage {
   public mno : number;
   public otp;
   public id;
+  public serv_res;
 
   constructor(public navCtrl: NavController, public homeservice: HomeService, http: HttpClientModule) { 
    
@@ -28,20 +29,17 @@ export class HomePage {
  
   action() {
     console.log("action done");
-    this.homeservice.logintry(this.mno).subscribe((res: Response) => {
-      this.id=res["id"];
-      console.log("id is "+this.id);
-      //this.homeservice.updId(this.id);
-      this.test(this.id,this.mno);
-    },
-      error => {
-        console.log(error, "error");
-      });
     try {
       this.homeservice.getOtp(this.mno)
         .subscribe((res: Response) => {
           console.log(res);
-
+          this.serv_res = JSON.stringify(res);
+          this.homeservice.upLogResDb(this.serv_res,this.id).subscribe((res: Response) => {
+            console.log(res);
+          },
+            error => {
+              console.log(error, "error");
+            });
         },
           error => {
             console.log(error, "error");
@@ -50,8 +48,19 @@ export class HomePage {
     } catch (e) {
       console.log(e);
     }
-  }
-    //(click)="test($event,item)"
+
+    this.homeservice.logintry(this.mno).subscribe((res: Response) => {
+      this.id=res["id"];
+      console.log("id is "+this.id);
+      this.test(this.id,this.mno);
+    },
+      error => {
+        console.log(error, "error");
+      });
+
+     
+
+  };
   public test(obj ,item ){
     this.navCtrl.push(VerifyPage,{
     item:this.mno,
