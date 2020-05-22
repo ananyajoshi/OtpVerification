@@ -61,7 +61,7 @@ app.post("/loginResponse",(req,res)=>{
       con.query(sql,values,(err,result)=>{
           if(err) throw err;
           console.log(result);
-          res.status(200).send("MSG91 server response is successfully updated into database ");
+          res.status(200).send("MSG91 response put into database");
       });
   });
 
@@ -93,7 +93,7 @@ app.post("/web/chk",(req,res)=>{
    
       
       let usrNm  = req.body.usrNm;  
-      let pwd = req.body.pwd;
+      let pwd =  req.body.pwd;
   
       
       let sql = `select PASSWORD FROM admin_table WHERE USER_NAME = ?`;
@@ -102,11 +102,17 @@ app.post("/web/chk",(req,res)=>{
       con.query(sql,values,(err,result)=>{
           if(err) throw err;
           console.log("checked password for "+usrNm);
-            if(result[0].PASSWORD==pwd){
-                res.status(200).send({verification : 'Verified'})
+
+          if(result[0]!=undefined){
+              if(result[0].PASSWORD==pwd){
+                  res.status(200).send({verification : 'Verified'});
+                }else{
+                    res.status(200).send({verification : 'Not Verified'});
+                }
             }else{
-                res.status(200).send({verification : 'Not Verified'})
+                res.status(200).send({verification : 'User not valid'});
             }
+
         });     
   });
 
@@ -115,7 +121,7 @@ app.post("/web/chk",(req,res)=>{
     let pwd = req.body.pwd;
 
 
-    let sql = `insert into admin values(?,?)`;
+    let sql = `insert into admin_table values(?,?)`;
     
     let values = [usrNm];
     con.query(sql,values,(err,result)=>{
@@ -125,6 +131,119 @@ app.post("/web/chk",(req,res)=>{
         
     });
 });
+
+
+app.post("/web/all_rqst",(req,res)=>{
+    
+    let sql = `select count(*) from requests_table  `;
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("No. of All is" + result[0].count );
+        res.status(200).send({no_pending : result[0].count });
+        
+    });
+});
+
+
+app.post("/web/pend_rqst",(req,res)=>{
+    
+    let sql = `select count(*) from requests_table where VERIFY_STATUS = 0 `;
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("no. of pending Requests is" + result[0].count );
+        res.status(200).send({no_All_rqst : result[0].count });
+        
+    });
+});
+
+//to be completed
+
+app.post("/web/get_request",(req,res)=>{
+
+    let id = req.body.id;
+    
+    let sql = `select * from requests_table where id = ? `;
+    let values = [id]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("no. of pending Requests is" + result[0].count );
+        res.status(200).send({no_All_rqst : result[0].count });
+        
+    });
+});
+
+
+app.post("/web/update_request",(req,res)=>{
+
+    let id = req.body.id;
+    let sts = req.body.sts;
+    let dt = new Date();
+    
+    let sql = `update requests_table set VERIFY_STATUS = ? REQUEST_VERIFY_DATETIME = ? where id = ? `;
+    let values = [sts,dt,id]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("Updated status of  Request @" + id );
+        res.status(200).send("ok");
+        
+    });
+});
+
+app.post("/web/bills_in_mnth",(req,res)=>{
+
+    let dt = new Date();
+    
+    let sql = `select count(*) from  requests_table where month(REQUEST_VERIFY_DATETIME) = month(?)  and year(REQUEST_VERIFY_DATETIME) = year(?)`;
+    let values = [dt,dt]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("No. of  Request in Current Month is " + result[0].count);
+        res.status(200).send({no_of_bills : result[0].count});
+    });
+});
+
+app.post("/web/amount_in_mnth",(req,res)=>{
+
+    let dt = new Date();
+    
+    let sql = `select sum(REQUESTED_AMOUNT) from  requests_table where month(REQUEST_VERIFY_DATETIME) = month(?)  and year(REQUEST_VERIFY_DATETIME) = year(?)`;
+    let values = [dt,dt]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log("Amount reimbursed in Current Month is " + result[0].sum(REQUESTED_AMOUNT));
+        res.status(200).send({no_of_bills : result[0].sum(REQUESTED_AMOUNT)});
+    });
+});
+
+app.post("/web/crt_rqst",(req,res)=>{
+
+    let name =req.body.name;
+    let ph_no =req.body.phone;
+    let amnt =req.body.bill_amount;
+    let bill_date = req.body.bill_date;
+    let bill_company = req.body.bill_company;
+    let img =  req.body.bill_image;
+
+
+    let dt = new Date();
+    
+    let sql = `insert into requests_table (APPLICANT_NAME,APPLICANT_MOBILE_NUMBER, BILL_DATE,
+        BILL_COMPANY_NAME,REQUESTED_AMOUNT,IMAGE_in_base64,CREATED_DATETIME ) 
+        VALUES(?,?,?,?,?,?,?)`;
+    let values = [name,ph_no,bill_date,bill_company,amnt,img,dt]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        res.status(200).send({'id':result.insertId});
+    });
+});
+
 
 
 
