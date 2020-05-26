@@ -133,32 +133,86 @@ app.post("/web/chk",(req,res)=>{
 });
 
 
-app.post("/web/all_rqst",(req,res)=>{
+app.post("/web/no_all_rqst",(req,res)=>{
     
     let sql = `select count(*) from requests_table  `;
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
         console.log("No. of All is" + result[0].count );
-        res.status(200).send({no_pending : result[0].count });
+        res.status(200).send({no_all_rqst : result[0].count });
         
     });
 });
 
 
-app.post("/web/pend_rqst",(req,res)=>{
+app.post("/web/no_pend_rqst",(req,res)=>{
     
     let sql = `select count(*) from requests_table where VERIFY_STATUS = 0 `;
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
         console.log("no. of pending Requests is" + result[0].count );
-        res.status(200).send({no_All_rqst : result[0].count });
+        res.status(200).send({no_pend_rqst : result[0].count });
         
     });
 });
 
-//to be completed
+app.post("/web/aprv_rqst",(req,res)=>{
+    let id = req.body.id;
+    
+    let sql = `select * from requests_table where VERIFY_STATUS = 1 `;
+    let values = [id]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log(JSON.stringify(result));
+        res.status(200).JSON(result);
+        
+    });
+});
+
+app.post("/web/rjt_rqst",(req,res)=>{
+    let id = req.body.id;
+    
+    let sql = `select * from requests_table where VERIFY_STATUS = 2 `;
+    let values = [id]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log(JSON.stringify(result));
+        res.status(200).JSON(result);
+        
+    });
+});
+
+app.post("/web/all_rqst",(req,res)=>{
+    let id = req.body.id;
+    
+    let sql = `select * from requests_table `;
+    let values = [id]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log(JSON.stringify(result));
+        res.status(200).JSON(result);
+        
+    });
+});
+
+app.post("/web/pnd_rqst",(req,res)=>{
+    let id = req.body.id;
+    
+    let sql = `select * from requests_table where VERIFY_STATUS = 0 `;
+    let values = [id]
+    
+    con.query(sql,values,(err,result)=>{
+        if(err) throw err;
+        console.log(JSON.stringify(result));
+        res.status(200).JSON(result);
+        
+    });
+});
 
 app.post("/web/get_request",(req,res)=>{
 
@@ -169,8 +223,8 @@ app.post("/web/get_request",(req,res)=>{
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
-        console.log("no. of pending Requests is" + result[0].count );
-        res.status(200).send({no_All_rqst : result[0].count });
+        console.log(JSON.stringify(result[0]));
+        res.status(200).JSON(result[0]);
         
     });
 });
