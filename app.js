@@ -133,7 +133,7 @@ app.post("/web/chk",(req,res)=>{
 });
 
 
-app.post("/web/no_all_rqst",(req,res)=>{
+app.get("/web/no_all_rqst",(req,res)=>{
     
     let sql = `select count(*) from requests_table  `;
     
@@ -146,7 +146,7 @@ app.post("/web/no_all_rqst",(req,res)=>{
 });
 
 
-app.post("/web/no_pend_rqst",(req,res)=>{
+app.get("/web/no_pend_rqst",(req,res)=>{
     
     let sql = `select count(*) from requests_table where VERIFY_STATUS = 0 `;
     
@@ -158,11 +158,9 @@ app.post("/web/no_pend_rqst",(req,res)=>{
     });
 });
 
-app.post("/web/aprv_rqst",(req,res)=>{
-    let id = req.body.id;
+app.get("/web/aprv_rqst",(req,res)=>{
     
     let sql = `select * from requests_table where VERIFY_STATUS = 1 `;
-    let values = [id]
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
@@ -172,11 +170,9 @@ app.post("/web/aprv_rqst",(req,res)=>{
     });
 });
 
-app.post("/web/rjt_rqst",(req,res)=>{
-    let id = req.body.id;
+app.get("/web/rjt_rqst",(req,res)=>{
     
     let sql = `select * from requests_table where VERIFY_STATUS = 2 `;
-    let values = [id]
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
@@ -186,11 +182,9 @@ app.post("/web/rjt_rqst",(req,res)=>{
     });
 });
 
-app.post("/web/all_rqst",(req,res)=>{
-    let id = req.body.id;
+app.get("/web/all_rqst",(req,res)=>{
     
     let sql = `select * from requests_table `;
-    let values = [id]
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
@@ -200,11 +194,9 @@ app.post("/web/all_rqst",(req,res)=>{
     });
 });
 
-app.post("/web/pnd_rqst",(req,res)=>{
-    let id = req.body.id;
+app.get("/web/pnd_rqst",(req,res)=>{
     
     let sql = `select * from requests_table where VERIFY_STATUS = 0 `;
-    let values = [id]
     
     con.query(sql,values,(err,result)=>{
         if(err) throw err;
@@ -247,7 +239,7 @@ app.post("/web/update_request",(req,res)=>{
     });
 });
 
-app.post("/web/bills_in_mnth",(req,res)=>{
+app.get("/web/bills_in_mnth",(req,res)=>{
 
     let dt = new Date();
     
@@ -261,7 +253,7 @@ app.post("/web/bills_in_mnth",(req,res)=>{
     });
 });
 
-app.post("/web/amount_in_mnth",(req,res)=>{
+app.get("/web/amount_in_mnth",(req,res)=>{
 
     let dt = new Date();
     
