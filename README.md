@@ -2,6 +2,6 @@
 
 Project to test how OTP verification from a Third Party can be acheived.  
 
-find the required files in src
+Find the required files in src
 
-nodejs server is present as app.js in root directory
+Nodejs Server is present as app.js in root directory
