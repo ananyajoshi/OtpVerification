@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+     
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<<ion-content padding>
+  <h1 text-center>Welcome to Smart-Bills</h1>
+  <div id="textfield">
+     <ion-item padding >
+        <ion-label  for="num" floating>Mobile No.</ion-label>
+        <ion-input   type="text" [(ngModel)]="mno" value="91" required ></ion-input>
+        
+     </ion-item> 
+     <div class="bttn">
+      <button ion-button round  (click)="action()" >Generate OTP</button>
+      </div>
+  </div>
+
+</ion-content>
